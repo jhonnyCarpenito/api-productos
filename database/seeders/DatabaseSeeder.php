@@ -13,19 +13,18 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        if (User::where('email', 'admin@test.com')->exists()) {
-            return;
-        }
+        $user = User::firstOrCreate(
+            ['email' => 'admin@test.com'],
+            [
+                'name' => 'Admin Test',
+                'password' => bcrypt('password'),
+            ]
+        );
 
-        $user = User::factory()->create([
-            'name' => 'Admin Test',
-            'email' => 'admin@test.com',
-            'password' => bcrypt('password'),
-        ]);
+        if (Currency::count() === 0) {
+            $now = now();
 
-        $now = now();
-
-        Currency::insert([
+            Currency::insert([
             [
                 'name' => 'Dólar Estadounidense',
                 'symbol' => 'USD',
@@ -62,6 +61,7 @@ class DatabaseSeeder extends Seeder
                 'updated_at' => $now,
             ],
         ]);
+    }
 
         $usdCurrencyId = Currency::where('symbol', 'USD')->value('id');
 
@@ -103,20 +103,22 @@ class DatabaseSeeder extends Seeder
             ],
         ];
 
-        foreach ($products as $data) {
-            $product = Product::create([
-                'name' => $data['name'],
-                'description' => $data['description'],
-                'price' => $data['price'],
-                'currency_id' => $usdCurrencyId,
-                'tax_cost' => $data['tax_cost'],
-                'manufacturing_cost' => $data['manufacturing_cost'],
-            ]);
+        if (Product::count() === 0 && $usdCurrencyId) {
+            foreach ($products as $data) {
+                $product = Product::create([
+                    'name' => $data['name'],
+                    'description' => $data['description'],
+                    'price' => $data['price'],
+                    'currency_id' => $usdCurrencyId,
+                    'tax_cost' => $data['tax_cost'],
+                    'manufacturing_cost' => $data['manufacturing_cost'],
+                ]);
 
-            $product->prices()->create([
-                'currency_id' => $usdCurrencyId,
-                'price' => $data['price'],
-            ]);
+                $product->prices()->create([
+                    'currency_id' => $usdCurrencyId,
+                    'price' => $data['price'],
+                ]);
+            }
         }
 
         $token = $user->createToken('admin-token')->plainTextToken;
