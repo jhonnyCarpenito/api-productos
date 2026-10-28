@@ -33,10 +33,34 @@ class AppServiceProvider extends ServiceProvider
             return true;
         });
 
-        Scramble::extendOpenApi(function (OpenApi $openApi) {
+        Scramble::resolveTagsUsing(function ($routeInfo, $operation) {
+            $uri = $routeInfo->route->uri();
+            if ($uri === 'api/login') {
+                return ['Autenticación'];
+            }
+            if ($uri === 'api/user') {
+                return ['User'];
+            }
+            if (str_contains($uri, 'prices')) {
+                return ['Precios'];
+            }
+            if (str_contains($uri, 'products')) {
+                return ['Productos'];
+            }
+            return ['General'];
+        });
+
+        Scramble::afterOpenApiGenerated(function (OpenApi $openApi) {
             $openApi->secure(
                 SecurityScheme::http('bearer')
             );
+
+            $openApi->tags = [
+                new \Dedoc\Scramble\Support\Generator\Tag('Autenticación', 'Endpoints de inicio de sesión y autenticación'),
+                new \Dedoc\Scramble\Support\Generator\Tag('User', 'Información del usuario autenticado'),
+                new \Dedoc\Scramble\Support\Generator\Tag('Productos', 'Gestión de productos'),
+                new \Dedoc\Scramble\Support\Generator\Tag('Precios', 'Gestión de precios multimoneda'),
+            ];
         });
     }
 }

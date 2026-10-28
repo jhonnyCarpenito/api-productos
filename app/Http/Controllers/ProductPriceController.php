@@ -17,6 +17,10 @@ class ProductPriceController extends Controller
     public function store(Request $request, Product $product): JsonResponse
     {
         $validated = $request->validate([
+            /**
+             * ID de la divisa (1: USD, 2: EUR, 3: VES, 4: COP, 5: GBP).
+             * @example 2
+             */
             'currency_id' => [
                 'required',
                 'exists:currencies,id',

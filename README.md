@@ -19,6 +19,22 @@ Para facilitar la evaluación sin necesidad de configuración local previa, el p
 
 ---
 
+## 💱 Divisas y Tipos de Cambio del Sistema
+
+El sistema implementa soporte para precios multimoneda y cuenta con las siguientes divisas y tipos de cambio de referencia (con respecto a `USD` como moneda base):
+
+| ID (`currency_id`) | Código / Símbolo | Nombre de la Divisa | Tipo de Cambio (Ref. USD) |
+| :---: | :---: | :--- | :---: |
+| **1** | `USD` | Dólar Estadounidense | `1.0000` (Moneda Base) |
+| **2** | `EUR` | Euro | `0.9200` |
+| **3** | `VES` | Bolívar Venezolano | `45.5000` |
+| **4** | `COP` | Peso Colombiano | `3900.0000` |
+| **5** | `GBP` | Libra Esterlina | `0.7900` |
+
+> **Nota para evaluación:** Al consumir endpoints como `POST /api/products`, `PUT /api/products/{id}` o `POST /api/products/{id}/prices`, utiliza el número correspondiente de la columna **ID (`currency_id`)**.
+
+---
+
 ## 🛠️ Instalación y Configuración Local
 
 En caso de requerir ejecutar el proyecto de forma local:

@@ -48,7 +48,20 @@ return [
 
     'info' => [
         'version' => env('API_VERSION', '1.0.0'),
-        'description' => "API para gestión de productos. \n\n**Credenciales de Prueba:**\n- Email: `admin@test.com`\n- Password: `password`\n\n*(Genera tu token en el endpoint /login o usa el que se mostró en tu terminal al correr las migraciones)*",
+        'description' => "API RESTful para la gestión de productos y precios multimoneda.\n\n"
+            . "### 🔐 Credenciales de Prueba:\n"
+            . "- **Email:** `admin@test.com`\n"
+            . "- **Password:** `password`\n\n"
+            . "### 💱 Divisas y Tipos de Cambio Disponibles:\n"
+            . "A continuación se detallan los identificadores (`currency_id`) y las tasas de cambio de referencia frente al dólar estadounidense (`USD`):\n\n"
+            . "| ID | Código / Símbolo | Nombre de la Divisa | Tipo de Cambio (Tasa Ref. USD) |\n"
+            . "| :---: | :---: | :--- | :---: |\n"
+            . "| **1** | `USD` | Dólar Estadounidense | `1.0000` (Moneda Base) |\n"
+            . "| **2** | `EUR` | Euro | `0.9200` |\n"
+            . "| **3** | `VES` | Bolívar Venezolano | `45.5000` |\n"
+            . "| **4** | `COP` | Peso Colombiano | `3900.0000` |\n"
+            . "| **5** | `GBP` | Libra Esterlina | `0.7900` |\n\n"
+            . "> *Utiliza el valor numérico de la columna **ID** en el campo `currency_id` al crear o actualizar productos y al asociar precios multimoneda.*",
     ],
 
     'ui' => [

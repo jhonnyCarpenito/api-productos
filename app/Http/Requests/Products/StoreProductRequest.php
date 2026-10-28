@@ -26,6 +26,10 @@ class StoreProductRequest extends FormRequest
             'name' => ['required', 'string'],
             'description' => ['required', 'string'],
             'price' => ['required', 'numeric', 'min:0'],
+            /**
+             * ID de la divisa base (1: USD, 2: EUR, 3: VES, 4: COP, 5: GBP).
+             * @example 1
+             */
             'currency_id' => ['required', 'exists:currencies,id'],
             'tax_cost' => ['required', 'numeric', 'min:0'],
             'manufacturing_cost' => ['required', 'numeric', 'min:0'],
