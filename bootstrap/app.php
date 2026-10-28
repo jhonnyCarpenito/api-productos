@@ -14,20 +14,25 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->trustProxies(at: '*');
-
-        $middleware->prepend(function (Request $request, \Closure $next) {
-            if ($request->is('api/*') && !empty($request->getContent())) {
-                $decoded = json_decode($request->getContent(), true);
-                if (is_array($decoded) && json_last_error() === JSON_ERROR_NONE) {
-                    $request->merge($decoded);
-                }
-            }
-
-            return $next($request);
-        });
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(
             fn (Request $request) => $request->is('api/*') || $request->expectsJson(),
         );
+
+        $exceptions->render(function (\Symfony\Component\HttpKernel\Exception\NotFoundHttpException $e, Request $request) {
+            if ($request->is('api/products/*')) {
+                $param = $request->route('product');
+
+                if ($param !== null && ! ctype_digit((string) $param)) {
+                    return response()->json([
+                        'message' => 'El identificador del producto debe ser numérico.',
+                    ], 400);
+                }
+
+                return response()->json([
+                    'message' => 'Producto no encontrado.',
+                ], 404);
+            }
+        });
     })->create();
