@@ -15,5 +15,6 @@ if [ -n "$APP_KEY" ]; then
 fi
 
 php artisan migrate --force
+php artisan db:seed --force
 
 exec "$@"
