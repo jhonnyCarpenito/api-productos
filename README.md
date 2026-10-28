@@ -11,7 +11,7 @@ API RESTful desarrollada en Laravel 13 con tipado estricto (PHP 8.3) para la ges
 
 1. Clonar el repositorio y entrar al directorio:
    ```bash
-   git clone <tu-repositorio> api-productos
+   git clone https://github.com/jhonnyCarpenito/api-productos.git
    cd api-productos
    ```
 2. Instalar dependencias:
