@@ -14,6 +14,17 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->trustProxies(at: '*');
+
+        $middleware->prepend(function (Request $request, \Closure $next) {
+            if ($request->is('api/*') && !empty($request->getContent())) {
+                $decoded = json_decode($request->getContent(), true);
+                if (is_array($decoded) && json_last_error() === JSON_ERROR_NONE) {
+                    $request->merge($decoded);
+                }
+            }
+
+            return $next($request);
+        });
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(
